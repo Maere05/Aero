@@ -1,0 +1,22 @@
+﻿<Window x:Class="Aero.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Aero"
+        mc:Ignorable="d"
+        Title="Aero" Height="600" Width="1200" WindowState="Normal">
+    <Grid Margin="0,0,0,-16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="46*"/>
+            <ColumnDefinition Width="503*"/>
+            <ColumnDefinition Width="351*"/>
+        </Grid.ColumnDefinitions>
+        <Image x:Name="viewport" HorizontalAlignment="Left" Height="500" Margin="10,10,0,0" VerticalAlignment="Top" Width="500" Grid.ColumnSpan="2"/>
+        <Button Content="Calculate" HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top" Height="40" Width="100" Click="Calculate" Grid.Column="2"/>
+        <TextBlock x:Name="txtOut" Grid.Column="2" HorizontalAlignment="Center" Margin="0,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="746" Width="448"/>
+        <Slider x:Name="Sld1" Width="120" Grid.Column="2" Margin="115,10,233,550" Maximum="100" LargeChange="9" Value="60"/>
+
+
+    </Grid>
+</Window>
