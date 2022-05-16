@@ -17,14 +17,12 @@ namespace Aero
      *      v = v0 + (f/m) * t
      *      
      *      
-     *      
      *   AOA 30:
      *    
      *   Lift : 421
      *   Drag : 262
      *    
      *    
-     * 
      */
 
     class Jumper
@@ -33,17 +31,16 @@ namespace Aero
 
         public float VelocityAngle = 0, AoA, time, mass;
 
-        float gravityConst = 9.81f;
+        float v0x, v0y;
 
-        float v0x,v0y, fx, fy, t, m;
-
-        static float LiftC = 421f / 900f;
-        static float DragC = 262f / 900f;
+        public static float LiftC = 421f / 900f;
+        public static float DragC = 262f / 900f;
 
 
-
-        public string Init(float mass_ ,float time_,float StartVel)
+        public string Init(float mass_ ,float time_,float StartVel, float Alpha)
         {
+            InterpolateAoA(Alpha);
+
             mass = mass_;
             time = time_;
 
@@ -51,7 +48,7 @@ namespace Aero
             v0y = -(MathF.Sin(VelocityAngle) * StartVel);
 
             //Position
-            Pos = new Vector2(20f, 20f);
+            Pos = new Vector2(0f, 0f);
 
             //Gravity Force
             FG = new Vector2(0f, mass * (-9.81f));      
@@ -63,54 +60,91 @@ namespace Aero
             V.Y = -(MathF.Sin(VelocityAngle) * StartVel);
 
             //Lift Forces
-            FL = new Vector2();
-
-            FL.X = MathF.Sin(VelocityAngle) * (LiftC * V.LengthSquared());    // Mutliply with V^2            
-            FL.Y = MathF.Cos(VelocityAngle) * (LiftC * V.LengthSquared());
-            
+            FL = Vector2.Normalize(new Vector2(-V.Y, V.X)) * LiftC * V.LengthSquared();
 
             //Drag Forces
-            FD = new Vector2();
-
-            FD.X = -(MathF.Cos(VelocityAngle) * (DragC * V.LengthSquared()));   // Multipy with V^2
-            FD.Y =  MathF.Sin(VelocityAngle) * (DragC * V.LengthSquared());
+            FD = Vector2.Normalize(new Vector2(-V.X, -V.Y)) * DragC * V.LengthSquared();
 
             return "Pos:" + Pos.ToString() + "\nGravity" + FG.ToString() + "\nlift" + FL.ToString() + "\nDrag" + FD.ToString() + "\nVel" + V.ToString();
         }
 
         public Vector2 Timestep()
         {
+            VelocityAngle = MathF.Atan(V.Y / V.X);
 
+            //Lift Forces
+
+            FL = Vector2.Normalize(new Vector2(-V.Y, V.X)) * LiftC * V.LengthSquared();
+
+            //Drag Forces
+
+            FD = Vector2.Normalize(new Vector2(-V.X, -V.Y)) * DragC * V.LengthSquared();
 
             Fres = FG + FD + FL;
-
             V.Y = v0y + (Fres.Y / mass) * time;
             v0y = V.Y;
 
             V.X = v0x + (Fres.X / mass) * time;
             v0x = V.X;
 
-
             Pos.X += V.X*time;      // m/s * s = m
             Pos.Y -= V.Y*time;                          // minus because its an easy fix
 
-
-            VelocityAngle = MathF.Atan(V.Y / V.X);
-
-            //Lift Forces
-
-            FL.X = MathF.Sin(VelocityAngle) * (LiftC * V.LengthSquared());    // Mutliply with V^2            
-            FL.Y = MathF.Cos(VelocityAngle) * (LiftC * V.LengthSquared());
-
-
-            //Drag Forces
-
-            FD.X = -MathF.Cos(VelocityAngle) * (DragC * V.LengthSquared());   // Multipy with V^2
-            FD.Y = MathF.Sin(VelocityAngle) * (DragC * V.LengthSquared());
-
-            float vel = V.Length();
-
             return Pos;
         }
-    }    
+
+        public void InterpolateAoA(float Alpha)
+        {
+            float t;
+            if (Alpha <= 10f)
+            {
+                LiftC = 130f / 900f;
+                DragC = 53f / 900f;
+            }
+            else if (Alpha <= 25f)
+            {
+                t = (Alpha - 10f) / 15f;
+
+                LiftC = Vector2.Lerp(new Vector2(130f, 53f), new Vector2(342f, 186f), t).X / 900f;
+                DragC = Vector2.Lerp(new Vector2(130f, 53f), new Vector2(342f, 186f), t).Y / 900f;
+                
+            }
+            else if (Alpha <= 30f)
+            {
+                t = (Alpha - 25f) / 5f;
+
+                LiftC = Vector2.Lerp(new Vector2(342f, 186f), new Vector2(421f, 262f), t).X / 900f;
+                DragC = Vector2.Lerp(new Vector2(342f, 186f), new Vector2(421f, 262f), t).Y / 900f;
+
+            }
+            else if (Alpha <= 35f)
+            {
+                t = (Alpha - 30f) / 5f;
+
+                LiftC = Vector2.Lerp(new Vector2(421f, 262f), new Vector2(470f, 337f), t).X / 900f;
+                DragC = Vector2.Lerp(new Vector2(421f, 262f), new Vector2(470f, 337f), t).Y / 900f;
+
+            }
+            else if (Alpha <= 40f)
+            {
+                t = (Alpha - 35f) / 5f;
+
+                LiftC = Vector2.Lerp(new Vector2(470f, 337f), new Vector2(502f, 414f), t).X / 900f;
+                DragC = Vector2.Lerp(new Vector2(470f, 337f), new Vector2(502f, 414f), t).Y / 900f;
+
+            }
+            else
+            {
+                t = (Alpha - 40f) / 20f;
+
+                LiftC = Vector2.Lerp(new Vector2(502f, 414f), new Vector2(370f, 999f), t).X / 900f;
+                DragC = Vector2.Lerp(new Vector2(502f, 414f), new Vector2(370f, 999f), t).Y / 900f;
+
+            }
+
+            //Console.WriteLine(LiftC + " D: " + DragC);                                            
+        }
+
+    }   
+    
 }

@@ -5,17 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Aero"
         mc:Ignorable="d"
-        Title="Aero" Height="600" Width="1200" WindowState="Normal">
-    <Grid Margin="0,0,0,-16">
+        Title="Aero" Height="784" Width="1006" WindowState="Normal" Background="#FF121212">
+    <Grid Margin="0,0,344,-6" Background="#FF242424">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="46*"/>
-            <ColumnDefinition Width="503*"/>
-            <ColumnDefinition Width="351*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="637*"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="viewport" HorizontalAlignment="Left" Height="500" Margin="10,10,0,0" VerticalAlignment="Top" Width="500" Grid.ColumnSpan="2"/>
-        <Button Content="Calculate" HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top" Height="40" Width="100" Click="Calculate" Grid.Column="2"/>
-        <TextBlock x:Name="txtOut" Grid.Column="2" HorizontalAlignment="Center" Margin="0,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="746" Width="448"/>
-        <Slider x:Name="Sld1" Width="120" Grid.Column="2" Margin="115,10,233,550" Maximum="100" LargeChange="9" Value="60"/>
+        <Image x:Name="viewport" Grid.Column="1" HorizontalAlignment="Center" Width="600" Height="600" VerticalAlignment="Center"/>
+        <Button Content="Calculate" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Height="26" Width="112" Click="Calculate" Grid.Column="1"/>
+
+        <TabControl Margin="636,0,-338,10" Grid.Column="1" Background="#FF121212" BorderBrush="Black" Foreground="Black">
+            <TabItem Header="Line 1">
+                <Grid Background="Gray" Margin="10,0,0,0" HorizontalAlignment="Left" Width="323">
+                    <CheckBox Content="Render Line" HorizontalAlignment="Left" Margin="16,9,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                    <Slider x:Name="SpeedSlider" HorizontalAlignment="Left" Margin="16,54,0,0" VerticalAlignment="Top" Width="120" Maximum="32" ValueChanged="SpeedSlider_ValueChanged"/>
+                    <Slider x:Name="MassSlider" HorizontalAlignment="Left" Margin="16,108,0,0" VerticalAlignment="Top" Width="120" Maximum="90" ValueChanged="MassSlider_ValueChanged"/>
+                    <TextBlock x:Name="SpeedText" HorizontalAlignment="Left" Margin="162,56,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="MassText" HorizontalAlignment="Left" Margin="162,110,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <Slider x:Name="AoASlider" HorizontalAlignment="Left" Margin="16,149,0,0" VerticalAlignment="Top" Width="120" Maximum="90" ValueChanged="AoASlider_ValueChanged"/>
+                    <TextBlock x:Name="AoAText" HorizontalAlignment="Left" Margin="162,154,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Line 2">
+                <Grid Background="#FF262626" Height="734"/>
+            </TabItem>
+            <TabItem Header="Line 3">
+                <Grid Background="#FF262626" Height="734"/>
+            </TabItem>
+            <TabItem Header="Line 4">
+                <Grid Background="#FF262626" Height="734"/>
+            </TabItem>
+            <TabItem Header="Line 5">
+                <Grid Background="#FF262626" Height="734"/>
+            </TabItem>
+        </TabControl>
+        <ComboBox x:Name="HillSelection" HorizontalAlignment="Left" Margin="127,10,0,0" VerticalAlignment="Top" Width="365" Text="Hill" Grid.Column="1" SelectionChanged="HillSelection_SelectionChanged"/>
+        <Slider x:Name="zoomSlider" Grid.Column="1" HorizontalAlignment="Left" Margin="511,12,0,0" VerticalAlignment="Top" Width="120" ValueChanged="zoomSlider_ValueChanged"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="497,0,0,0" TextWrapping="Wrap" Text="Zoom:" VerticalAlignment="Top" Foreground="White"/>
+
+
 
 
     </Grid>
