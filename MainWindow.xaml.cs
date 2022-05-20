@@ -34,8 +34,9 @@ namespace Aero
         float Mass = 60;
         float Speed = 22f;
         float Alpha = 30f;
+        float Wind = 0.5f;
 
-        Jumper jumper;
+        Jumper jumper = new Jumper();
         Bitmap bmp = new Bitmap(h, w);
         Graphics g;
         Pen pen = new Pen(Color.White, 1.5f);
@@ -43,8 +44,6 @@ namespace Aero
         Brush brush = new SolidBrush(Color.FloralWhite);
         Vector2 p2;
         Hill[] hills = new Hill[5];
-
-
         public MainWindow()
         {
             InitializeComponent();
@@ -53,8 +52,7 @@ namespace Aero
 
         public void updateViewport()
         {
-            p2 = new Vector2(0, 0);
-            jumper = new Jumper();
+            p2 = Vector2.Zero;
             jumper.V = Vector2.Zero;
             jumper.Pos.X = 0;
             jumper.Pos.Y = 0;
@@ -65,9 +63,9 @@ namespace Aero
             g.Clear(Color.Black);
             drawHill(HillSelection.SelectedIndex);
 
-            jumper.Init(Mass, 0.1f, Speed, Alpha); // 22 Kandersteg, 23 Oberstdorf, 27 Vikersund, 28Planica
+            jumper.Init(Mass, 0.01f, Speed, Alpha, Wind); // 22 Kandersteg, 23 Oberstdorf, 27 Vikersund, 28Planica
 
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 2000; i++)
             {
                 points();
             }
@@ -94,16 +92,6 @@ namespace Aero
         }
         void initHills()
         {
-
-            for (int i = 10; i < 25; i++)
-            {
-                float t = (i - 10f) / 15f;
-
-                float LiftC = Vector2.Lerp(new Vector2(130f, 53f), new Vector2(262f, 126f), t).X / 900f;
-                float DragC = Vector2.Lerp(new Vector2(130f, 53f), new Vector2(262f, 126f), t).Y / 900f;
-                Console.WriteLine(LiftC + " D: " + DragC);
-            }
-
             hills[0] = new Hill();
             hills[1] = new Hill();
             hills[2] = new Hill();
@@ -175,8 +163,9 @@ namespace Aero
             zoomSlider.Value = 3f;
             zoomSlider.Minimum = 0.7f;
 
-            SpeedSlider.Value = 22f;
-            SpeedSlider.Minimum = 10f;
+            SpeedSlider.Value = 88f;
+            SpeedSlider.Minimum = 50f;
+            SpeedSlider.Maximum = 120f;
 
             MassSlider.Value = 60f;
             MassSlider.Minimum = 20f;
@@ -184,6 +173,10 @@ namespace Aero
             AoASlider.Value = 30f;
             AoASlider.Minimum = 10f;
             AoASlider.Maximum = 60f;
+
+            windSlider.Value = 0.5f;
+            windSlider.Minimum = -5f;
+            windSlider.Maximum = 5f;
 
 
         }
@@ -238,23 +231,29 @@ namespace Aero
 
         private void SpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Speed = (float)SpeedSlider.Value;
-            SpeedText.Text = MathF.Round( (float)SpeedSlider.Value, 2).ToString() + " m/s";
+            Speed = (float)SpeedSlider.Value / 3.6f;
+            SpeedText.Text = MathF.Round( (float)SpeedSlider.Value, 1).ToString() + " km/h";
             updateViewport();
 
         }
-
         private void MassSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Mass = (float)MassSlider.Value;
-            MassText.Text = MathF.Round( (float)MassSlider.Value, 2).ToString() + " Kg";
+            MassText.Text = MathF.Round( (float)MassSlider.Value, 1).ToString() + " Kg";
             updateViewport();
         }
 
         private void AoASlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Alpha = (float)AoASlider.Value;
-            AoAText.Text = MathF.Round((float)AoASlider.Value, 2).ToString() + "°";
+            AoAText.Text = MathF.Round((float)AoASlider.Value, 1).ToString() + "°";
+            updateViewport();
+        }
+
+        private void windSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Wind = (float)windSlider.Value;
+            windText.Text = MathF.Round((float)windSlider.Value, 2).ToString() + "m/s Wind";
             updateViewport();
         }
     }

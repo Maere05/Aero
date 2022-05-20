@@ -19,11 +19,13 @@
                 <Grid Background="Gray" Margin="10,0,0,0" HorizontalAlignment="Left" Width="323">
                     <CheckBox Content="Render Line" HorizontalAlignment="Left" Margin="16,9,0,0" VerticalAlignment="Top" IsChecked="True"/>
                     <Slider x:Name="SpeedSlider" HorizontalAlignment="Left" Margin="16,54,0,0" VerticalAlignment="Top" Width="120" Maximum="32" ValueChanged="SpeedSlider_ValueChanged"/>
-                    <Slider x:Name="MassSlider" HorizontalAlignment="Left" Margin="16,108,0,0" VerticalAlignment="Top" Width="120" Maximum="90" ValueChanged="MassSlider_ValueChanged"/>
+                    <Slider x:Name="MassSlider" HorizontalAlignment="Left" Margin="16,100,0,0" VerticalAlignment="Top" Width="120" Maximum="90" ValueChanged="MassSlider_ValueChanged"/>
                     <TextBlock x:Name="SpeedText" HorizontalAlignment="Left" Margin="162,56,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-                    <TextBlock x:Name="MassText" HorizontalAlignment="Left" Margin="162,110,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="MassText" HorizontalAlignment="Left" Margin="162,102,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
                     <Slider x:Name="AoASlider" HorizontalAlignment="Left" Margin="16,149,0,0" VerticalAlignment="Top" Width="120" Maximum="90" ValueChanged="AoASlider_ValueChanged"/>
                     <TextBlock x:Name="AoAText" HorizontalAlignment="Left" Margin="162,154,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    <Slider x:Name="windSlider" HorizontalAlignment="Left" Margin="16,195,0,0" VerticalAlignment="Top" Width="120" ValueChanged="windSlider_ValueChanged"/>
+                    <TextBlock x:Name="windText" HorizontalAlignment="Left" Margin="162,196,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Line 2">

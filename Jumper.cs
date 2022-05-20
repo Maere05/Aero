@@ -29,7 +29,7 @@ namespace Aero
     {
         public Vector2 V, FG, FD, FL, Fres, Pos;
 
-        public float VelocityAngle = 0, AoA, time, mass;
+        public float VelocityAngle = 0, AoA, time, mass, wind;
 
         float v0x, v0y;
 
@@ -37,33 +37,34 @@ namespace Aero
         public static float DragC = 262f / 900f;
 
 
-        public string Init(float mass_ ,float time_,float StartVel, float Alpha)
+        public string Init(float mass_ ,float time_,float StartVel, float Alpha, float Wind)
         {
             InterpolateAoA(Alpha);
 
             mass = mass_;
             time = time_;
+            wind = Wind;
 
             v0x = MathF.Cos(VelocityAngle) * StartVel;     // Cosine function is in radians :(
             v0y = -(MathF.Sin(VelocityAngle) * StartVel);
 
             //Position
-            Pos = new Vector2(0f, 0f);
+            Pos = Vector2.Zero;
 
-            //Gravity Force
-            FG = new Vector2(0f, mass * (-9.81f));      
+            //Gravity 
+            FG.X = 0;
+            FG.Y = mass * -9.81f;
 
             //Starting Velocity
-            V = new Vector2();
 
             V.X =  MathF.Cos(VelocityAngle) * StartVel;     // Cosine function is in radians :(
             V.Y = -(MathF.Sin(VelocityAngle) * StartVel);
 
             //Lift Forces
-            FL = Vector2.Normalize(new Vector2(-V.Y, V.X)) * LiftC * V.LengthSquared();
+            FL = Vector2.Normalize(new Vector2(-V.Y, V.X)) * LiftC * MathF.Pow(V.Length() + wind,2);
 
             //Drag Forces
-            FD = Vector2.Normalize(new Vector2(-V.X, -V.Y)) * DragC * V.LengthSquared();
+            FD = Vector2.Normalize(new Vector2(-V.X, -V.Y)) * DragC * MathF.Pow(V.Length() + wind,2);
 
             return "Pos:" + Pos.ToString() + "\nGravity" + FG.ToString() + "\nlift" + FL.ToString() + "\nDrag" + FD.ToString() + "\nVel" + V.ToString();
         }
@@ -74,11 +75,11 @@ namespace Aero
 
             //Lift Forces
 
-            FL = Vector2.Normalize(new Vector2(-V.Y, V.X)) * LiftC * V.LengthSquared();
+            FL = Vector2.Normalize(new Vector2(-V.Y, V.X)) * LiftC * MathF.Pow(V.Length() + wind,2);
 
             //Drag Forces
 
-            FD = Vector2.Normalize(new Vector2(-V.X, -V.Y)) * DragC * V.LengthSquared();
+            FD = Vector2.Normalize(new Vector2(-V.X, -V.Y)) * DragC * MathF.Pow(V.Length() + wind,2);
 
             Fres = FG + FD + FL;
             V.Y = v0y + (Fres.Y / mass) * time;
@@ -108,6 +109,7 @@ namespace Aero
                 LiftC = Vector2.Lerp(new Vector2(130f, 53f), new Vector2(342f, 186f), t).X / 900f;
                 DragC = Vector2.Lerp(new Vector2(130f, 53f), new Vector2(342f, 186f), t).Y / 900f;
                 
+
             }
             else if (Alpha <= 30f)
             {
@@ -141,8 +143,7 @@ namespace Aero
                 DragC = Vector2.Lerp(new Vector2(502f, 414f), new Vector2(370f, 999f), t).Y / 900f;
 
             }
-
-            //Console.WriteLine(LiftC + " D: " + DragC);                                            
+                                          
         }
 
     }   
